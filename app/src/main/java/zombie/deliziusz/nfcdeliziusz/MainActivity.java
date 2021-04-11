@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
             finish();
         }
         readFromIntent(getIntent());
-        //Mandamos el pendingIntent
+        //Mandamos el pendingIntent para ver si nuestro adaptador NFC descubrió algun dispositvo que tenga un tag
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
@@ -59,7 +59,7 @@ public class MainActivity extends Activity {
     }
 
 
-    //Lectura
+    //Método de lectura
     private void readFromIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
@@ -76,6 +76,8 @@ public class MainActivity extends Activity {
             buildTagViews(msgs);
         }
     }
+    //Construcción de la etiqueta
+    //Ontenemos el código
     private void buildTagViews(NdefMessage[] msgs) {
         if (msgs == null || msgs.length == 0) return;
         String text = "";
@@ -89,9 +91,11 @@ public class MainActivity extends Activity {
         } catch (UnsupportedEncodingException e) {
             Log.e("No soportado", e.toString());
         }
-        tvNFCContent.setText("NFC Contenido: " + text);
+        //mostramos el contenido encontrado
+        tvNFCContent.setText("NFC Contenido: " + text+ " caracteres ASCII");
     }
-
+//método que encapsula los datos para que puedan ser mostrados en código ASCII así como
+    //se realizó la lectura
     private NdefRecord createRecord(String text) throws UnsupportedEncodingException {
         String lang       = "en";
         byte[] textBytes  = text.getBytes();
@@ -105,7 +109,7 @@ public class MainActivity extends Activity {
         NdefRecord recordNFC = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,  NdefRecord.RTD_TEXT,  new byte[0], payload);
         return recordNFC;
     }
-
+//método abstracto necesario para NFC que nos manda el intent de lo que tenga mi tag
     @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
@@ -114,24 +118,26 @@ public class MainActivity extends Activity {
             myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         }
     }
-
+//si esta pausado la escritura es nula
     @Override
     public void onPause(){
         super.onPause();
         WriteModeOff();
     }
-
+//si continua corriendo
+    //la lectura es ON
     @Override
     public void onResume(){
         super.onResume();
         WriteModeOn();
     }
-
+//metodo de escritura ON
+    //enviamos el dispach donde agregamos el pending intent y la tag de la escritura
     private void WriteModeOn(){
         writeMode = true;
         nfcAdapter.enableForegroundDispatch(this, pendingIntent, writeTagFilters, null);
     }
-
+//se deshabilita escritura y manda mensajes de error y cierra la app
     private void WriteModeOff(){
         writeMode = false;
         nfcAdapter.disableForegroundDispatch(this);
