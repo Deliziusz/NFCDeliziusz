@@ -17,51 +17,49 @@ import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 
+
 public class MainActivity extends Activity {
-//Creamos el adaptador nfc
-    NfcAdapter nfcAdapter;
-    //Creamos un pendingIntent
-    PendingIntent pendingIntent;
-    //Intent filter para la escritura
-    IntentFilter writeTagFilters[];
-    //variable que cambia si estamos en modo lectura
-    boolean writeMode;
-    //etiqueta del tag
-    Tag myTag;
+    //Declaración de variables y recursos como los adaptadores
+    //pendingIntent
+    //intent
+    //Escritura
+    //tag/etiquetaa
     //contexto
+    NfcAdapter nfcAdapter;
+    PendingIntent pendingIntent;
+    IntentFilter writeTagFilters[];
+    boolean writeMode;
+    Tag myTag;
     Context context;
-    //datos
+
     TextView tvNFCContent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //damos el contexto
         context = this;
-        //asignamos la etiqueta  al  recurso que tenemos en el layout
+        //damos un contexto y referenciamos los elementos en la carpeta de recursos del layout
         tvNFCContent = (TextView) findViewById(R.id.nfc_contenido);
 
-        //El adaptador nfc es igual al punto del adaptador nfc, lo comprobamos
-        //decimos que sí
+        //creamos un adaptador
+        //verificiamos si el dispositivo soporta NFC
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
             // Verificación del NFC en el dispositivo
             Toast.makeText(this, "Este dispositivo no soporta NFC.", Toast.LENGTH_LONG).show();
             finish();
         }
-        //leemos el intent
         readFromIntent(getIntent());
-
-        pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
-                getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        //Mandamos el pendingIntent
+        pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
         writeTagFilters = new IntentFilter[] { tagDetected };
     }
 
 
-    //Método de Lectura
+    //Lectura
     private void readFromIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
@@ -87,8 +85,7 @@ public class MainActivity extends Activity {
 
         try {
             // Obtener texto
-            text = new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1,
-                    textEncoding);
+            text = new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
         } catch (UnsupportedEncodingException e) {
             Log.e("No soportado", e.toString());
         }

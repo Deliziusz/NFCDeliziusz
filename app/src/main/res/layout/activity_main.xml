@@ -1,31 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
+    <LinearLayout
+        android:layout_width="414dp"
+        android:layout_height="60dp"
+        android:foreground="@color/black"/>
 
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="NFC Deliziusz: "
+        android:textColor="#039BE5"
+        android:textStyle="bold"
+        android:textSize="30dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:text="NFC: "
-        android:textColor="#000000"
-        android:textSize="30dp"></TextView>
+        android:layout_marginTop="10dp"
+        >
+    </TextView>
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20sp" />
-
     <TextView
         android:id="@+id/nfc_contenido"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
+        android:textColor="#BF1A1A"
+        android:textStyle="bold"
         android:textSize="20dp"
-        android:textColor="#fff"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
         />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="410dp"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/uno" />
 </LinearLayout>
